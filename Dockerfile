@@ -36,7 +36,7 @@ RUN docker-php-ext-install \
     curl \
     json \
     xsl
-    
+
 # Enable Apache mods
 RUN a2enmod rewrite alias headers expires
 
@@ -53,14 +53,8 @@ RUN dpkg-reconfigure locales && \
 
 RUN echo 'fr_FR.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
 
-# Custom PHP configuration
-RUN echo "always_populate_raw_post_data = -1" >> $PHP_INI_DIR/conf.d/custom.ini
-RUN echo "max_execution_time = 240" >> $PHP_INI_DIR/conf.d/custom.ini
-RUN echo "max_input_vars = 1500" >> $PHP_INI_DIR/conf.d/custom.ini
-RUN echo "upload_max_filesize = 32M" >> $PHP_INI_DIR/conf.d/custom.ini
-RUN echo "post_max_size = 32M" >> $PHP_INI_DIR/conf.d/custom.ini
-RUN echo "memory_limit = 256M" >> $PHP_INI_DIR/conf.d/custom.ini
-RUN echo "date.timezone = Europe/Paris" >> $PHP_INI_DIR/conf.d/custom.ini
+# Add custom PHP configuration
+COPY php-custom.ini $PHP_INI_DIR/conf.d/
 
 # Export ports
 EXPOSE 443
